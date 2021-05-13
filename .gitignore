@@ -1,0 +1,8 @@
+__pycache__/
+build/
+dist/
+*.spec
+*.code-workspace
+.vscode/
+typings/
+*.pyc
