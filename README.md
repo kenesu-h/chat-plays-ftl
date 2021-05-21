@@ -1,6 +1,6 @@
 # crowdplay-bot
 This is a command line bot that allows chat messages from platforms such as
-Discord and Twitch to control games, such as FTL: Faster Than Light and any
+Discord and Twitch to control games, like FTL: Faster Than Light and any
 Nintendo DS games (including Pokemon).
 
 # Usage
