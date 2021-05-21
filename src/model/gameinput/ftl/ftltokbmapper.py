@@ -1,6 +1,6 @@
-from gameinput.kbinput import KBInput
-from gameinput.ftl.ftlaction import FTLAction
-from gameinput.ftl.ftlinput import FTLInput
+from model.gameinput.kbinput import KBInput
+from model.gameinput.ftl.ftlaction import FTLAction
+from model.gameinput.ftl.ftlinput import FTLInput
 
 from typing import Dict
 
@@ -43,11 +43,11 @@ class FTLToKBMapper():
   def get_kb_input(self, ftl_input: FTLInput) -> KBInput:
     if ftl_input.action in self.__mappings:
       if ftl_input.presses > 0:
-        return KBInput([self.__mappings[ftl_input.action]], ftl_input.presses)
+        return KBInput([], [self.__mappings[ftl_input.action]], ftl_input.presses)
       elif ftl_input.presses < 0:
-        return KBInput(["shift", self.__mappings[ftl_input.action]],
+        return KBInput(["shift"], [self.__mappings[ftl_input.action]],
           0 - ftl_input.presses)
       else:
-        return KBInput([], 0)
+        return KBInput([], [], 0)
     else:
-      return KBInput([], 0)
+      return KBInput([], [], 0)

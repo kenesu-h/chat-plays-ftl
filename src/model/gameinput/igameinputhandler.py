@@ -1,4 +1,4 @@
-from gameinput.igameinput import GameInput
+from model.gameinput.igameinput import GameInput
 
 from abc import ABC, abstractmethod
 
@@ -19,7 +19,16 @@ class GameInputHandler(ABC):
     return
 
   @abstractmethod
-  async def handle_inputs(self) -> None:
-    """Initializes an asynchronous, constant loop to handle and run game inputs.
+  def pop_input(self) -> None:
+    """Pops the game input at the top of this handler's internal stack.
     """
-    pass
+    return
+
+  @abstractmethod
+  def handle_input(self, game_input: GameInput) -> None:
+    """Parses a game input and performs a corresponding action.
+
+    :param game_input: the game input
+    :type game_input: GameInput
+    """
+    return

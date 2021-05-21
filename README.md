@@ -1,79 +1,69 @@
-# chat-plays-ftl
-This is a command line bot that allows chat messages from Discord to control 
-the game FTL: Faster Than Light, much like Twitch Plays Pokemon.
+# crowdplay-bot
+This is a command line bot that allows chat messages from platforms such as
+Discord and Twitch to control games, such as FTL: Faster Than Light and any
+Nintendo DS games (including Pokemon).
 
 # Usage
-Here's a quick primer on usage. As per command line programs, you'll have to run
-this in something like Windows PowerShell or a terminal emulator.
-```
-./chat-plays-ftl
-```
-This doesn't take command line arguments yet, but this will probably change in
-the future.
+The bot can be run just by running the compiled executable. Alternatively, it
+can also be run via command line, although there aren't any arguments to be
+aware of. A GUI will be used to configure, start, and stop the bot on demand,
+but you must keep it open to keep the bot active.
 
-You'll need your own Discord bot set up via the Discord Developer Portal. Paste
-your bot's token as the value for `TOKEN` in `main.py`. I will not give you mine.
+# Supported Platforms
+Figured that this would be important before going into the configuration. This
+bot only supports Discord at the moment. Twitch implementation is VERY MUCH a
+work-in-progress, and no other platforms are supported, although I have YouTube
+planned.
+
+# Configuration
+Configuration can be done entirely within the GUI. That said, there are a few
+important settings to take into account.
+
+# General
+These settings are required no matter what platform you plan to use.
+- Prefix:
+  - Default: ";"
+  - Like most bots, this bot will only read messages that begin with this prefix.
+- Platform:
+  - Default: "none"
+  - Specifies the platform this bot will function on. Must be one of "discord",
+    "twitch" or "none".
+- Token:
+  - Default: ""
+  - Bots on a platform like Discord or Twitch usually use OAuth tokens to sign
+    into them and interact with the API directly. You'll have to acquire one of
+    these on your own.
+
+## Twitch-only
+- Username:
+  - Default: ""
+  - Unfortunately, an OAuth token isn't the only thing you need for this bot to
+    connect to Twitch. You'll have to provide the username to your bot's Twitch
+    account.
 
 # Background
-## What's FTL?
-In short, it's a game where you get to be a spaceship commander and have to
-travel across space to beat the final boss.
-
-For those who would want a slightly more in-depth explanation, it's a real-time
-strategy roguelike game developed by Subset Games, where you control a spaceship
-and its crew across randomly generated locations in space. At each location, you
-get a pick-your-own-adventure-esque dialogue choice, where you could potentially
-fight other ships, lose your crew members, get new crew members, and various
-other random events that may (or may not) directly contribute to your success as
-you travel to the final boss.
-
-Gameplay-wise, you have a pool of "power bars" you can allocate to individual
-systems. This means that if you have a limited amount of power (which is most of
-the time), you can choose to take away power from a system such as oxygen, and
-use that power in a system that might be more important in the moment (engines
-for dodge chance, cloaking to completely avoid a dangerous attack). You can use
-"scrap" gained from fights and random events to upgrade these systems -- which
-increases the maximum power you can allocate to them --- increase the number of
-total power bars available, or spend it at stores to get new weapons or systems.
-For example, a ship that completely lacks cloaking can buy it at a store to get
-access to it. There's much more to it than that, but that should give you the
-gist of what gameplay is like. While it's real-time, you're allowed to pause the
-game and plan your next move.
-
-## What inspired you to do this?
-One of my friends regularly streams FTL on Twitch, and tends to name her in-game
-crew members after her viewers. There was a bit of a personal connection made as
-a result of this, so I thought it would be cool to allow viewers control their
-respective crew members through chat, like how Twitch Plays Pokemon allowed
-people to control the main character through Twitch chat. I went for Discord
-chat support first though, since I'm already pretty familiar with Discord bot
-development. Problem is, my initial idea was way too ambitious.
-
-## Why was your initial idea too ambitious?
-While much of the game can be played with the keyboard, several crucial elements
-of gameplay require the mouse. You need the mouse to move crew between different
-rooms, and especially for aiming weapons at rooms in the enemy ship. If I wanted
-to let people control individual crew members, I would have to somehow use
-simulated mouse input to allow them to be moved. Fortunately, FTL already
-provides some keybindings for selecting a specific crew member, and layouts are
-consistent between the selectable ships. Unfortunately, the ship itself is in a
-different place on-screen depending on whether the player is currently in a
-fight or not, and figuring out that out (if the player is in a fight) requires
-memory editing. Considering I figured I had to deal with the game state one way
-or another --- such as for viewing crew member health and telling a person if
-their respective crew member has died --- memory editing was a given, but the
-modding/cheating scene is limited, plus I spent a whole day trying to figure
-this out and got pretty much nowhere. So pretty much, anything involving mouse
-input and direct access to the game state was a bust. Like I said though, much
-of the game can still be played via keyboard, which is what led to the work done
-on this bot.
+One of my friends streamed FTL on Twitch, and tends to name their in-game crew
+members after her viewers. There was a bit of a personal connection to our crew
+members as a result of this, so I thought it would be cool to allow viewers to
+control their respective crew members and have a direct impact on the game
+through chat, just like how Twitch Plays Pokemon allowed viewers to control the
+protagonist of the Pokemon games. Unfortunately, FTL's modding support is fairly
+limited and without really dirty work, most of my initial ideas were close to
+impossible. However, since much of FTL could still be controlled with just the
+keyboard, I figured it was still possible for viewers to have a degree of
+meaningful control over the game. Once I got FTL implementation done though, I
+figured that it was best to let this support multiple games and not just FTL.
+It's hardly an original idea (especially the Pokemon implementation), but I felt
+it was probably a good way to simultaneously create something practical and have
+fun doing it.
 
 # Functionality
 Using chat (only Discord is supported right now), people have some degree of
 control over the game, namely power allocation and system activation. The
 default prefix for each command is `;`.
 
-## Power Control
+## FTL
+### Power Control
 To add power to a system, your message must be the prefix, combined with
 the name of the system you want to target and the amount of power you want to
 add. For example, if you wanted to add 2 power to engines, you would do this:
@@ -85,7 +75,7 @@ To remove power from a system, use the same format, but with a negative number.
 ;engines -2
 ```
 
-## System Activation
+### System Activation
 If you played or watched FTL before, you might know that systems can be
 activated, such as cloaking. Systems that require a room to target --- and
 therefore mouse usage --- cannot be activated, but systems that don't can just
@@ -99,19 +89,23 @@ so:
 ;cloaking -3
 ```
 
-## System Name Abbreviation
+### System Name Abbreviation
 System names can be abbreviated so you don't have to type the whole system name
 out. For example, you can do `;cloak` instead of `;cloaking`, or `;mb` instead
 of `;medbay`. There a lot more accepted abbreviations, but that's way too much
 to type out.
 
-## Door Control
-Doors however are a little different. Since you can only open or close
-individual doors using the mouse, people can only use the keyboard shortcut of
-opening and closing ALL doors. For both respectively, do `;doors open` and
-`;doors close`.
+### Weapon and Drone Control
+Weapon and drone control are slightly different, since you can directly power or
+depower a specific weapon/drone slot. `;weapons 2` will power the weapon in
+weapon slot 2, and likewise `;weapons -2` will depower that slot.
 
-## Event Dialogue Options
+### Door Control
+Since you can only open or close individual doors using the mouse, people can
+only use the keyboard shortcut of opening and closing ALL doors. For both
+respectively, do `;doors open` and `;doors close`.
+
+### Event Dialogue Options
 Finally, in true anarchic fashion, people are able to choose the dialogue option
 for an event. This is as simple as `;choose 1`, just replace the 1 with the
 number of the option you want; don't worry, the game visibly gives the number
@@ -122,26 +116,37 @@ commands are put into a queue, so your command might not be processed
 immediately. For a timing-centric game such as FTL, this will likely make things
 much tougher, but it's better than nothing.
 
-# Code Approach
-For those who are interested, the design behind this code isn't really that
-complicated. An instance of a bot is created using `discord.py`, and using an
-event handler that's called every time a message is sent, every incoming message
-is converted into a class instance representing an action in FTL (such as
-powering a system). That instance is passed to and queued up in an input handler
-that is constantly looping. Every loop, the next action in the queue is
-processed and converted into an keystroke (or a series of such), which is
-executed using `pywin32`. However, this is only done if FTL is the currently
-focused window on the bot's host's computer. I could go on and on about the
-object-oriented design, but either way I didn't apply the MVC design pattern
-that much to this, given the relatively small scale of this project.
+## Nintendo DS
+More people will probably be familiar with Nintendo DS games and I happen to be
+a bit of a Pokemon nerd, so DS game support has been added in addition to FTL
+support. I don't condone emulation, but this assumes that you're emulating DS
+games using DeSmuME.
+
+Similar to FTL, commands can be made by giving the prefix combined with the name
+of the button you want to press. `;a` will press the A button once, whereas 
+`;a 5` will press the A button 5 times. I limited the amount of button presses
+to 10 so someone's command can't just hog the queue.
+
+Like the mouse situation with FTL, touch screen inputs aren't supported, since
+usage differs from game to game and it would be difficult to capture touch
+screen input as a message. Luckily, games like Pokemon don't really need the
+touch screen outside a few specific minigames, so as long as you don't touch
+those, you should be fine.
 
 # Source Code
 If you're a developer, feel free to look at and edit the source code for
-yourself. However, I use a few Python modules that aren't installed by default.
-- `discord.py` to interface with the Discord API and create a bot.
+yourself. The GPLv3 license covers most of what you can and can't do, but while
+crediting me isn't necessary by any means, it would be appreciated if you did.
+
+However, I use a few Python modules that aren't installed by default.
+- `discord.py` to interface with the Discord API and create an asynchronous bot.
+- `pydle` to create an asynchronous implementation of an IRC bot.
 - `pywin32` to interface with Windows APIs and access Windows application
   information. 
 - `pyautogui` to make keyboard inputs using Python.
+- `pydirectinput` to make keyboard inputs if a game doesn't work with
+  `pyautogui`.
+- `pyqt5` to create the primary GUI, although this may be subject to change.
 Since `pywin32` works with the Windows APIs, you might not be able to run the
 source code on any operating system other than Windows.
 
@@ -176,13 +181,8 @@ A lot of the existing to-do's generally have to do with the ideas from the
 original idea, which again I can't really do until I get direct access to the
 game's state and related information through an API or something. I do have a
 few things that are well within the realm of possibility, however.
-- Code's due for a cleanup despite the fact that I literally just wrote this.
-  It's kinda been done with the intent of just getting it to work, and as a
-  result, there are some things that could be made... more efficient, to say
-  the least. As it stands, it's not really indicative of how I would usually
-  structure a bot like this, so it'd be nice to refactor a bunch of stuff and
-  encapsulate individual jobs in classes.
-- I'll add an easier way to change the bot's prefix, which will probably involve
-  command line arguments or a configuration file. Maybe both.
+- The code is due for a MAJOR cleanup despite the fact that I literally just
+  wrote this. Abstraction would be nice in several areas
 - Although the asynchronous, Internet-facing parts of this code can't be tested
   easily, unit-testing everything else seems pretty feasible.
+- It might be fun to play around with making this support other games too.

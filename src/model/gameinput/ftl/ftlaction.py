@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from gameinput.ftl.ftlsystem import FTLSystem
+from model.gameinput.ftl.ftlsystem import FTLSystem
 
 from enum import Enum
-from typing import List
 
 class FTLAction(Enum):
   # Repeatable Actions

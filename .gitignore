@@ -6,3 +6,4 @@ dist/
 .vscode/
 typings/
 *.pyc
+config.json

@@ -1,5 +1,5 @@
-from gameinput.igameinput import GameInput
-from gameinput.ftl.ftlaction import FTLAction
+from model.gameinput.igameinput import GameInput
+from model.gameinput.ftl.ftlaction import FTLAction
 
 class FTLInput(GameInput):
   """An class representing an input for FTL. Each input is expected to specify a
